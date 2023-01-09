@@ -1,0 +1,185 @@
+$col: #55DBF8;
+
+.cardDeck {
+    max-width: 1024px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .card {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10%;
+
+        .cardLeft {
+            padding: 10px;
+            flex: 1;
+
+            @media screen and (max-width: 576px) {
+                flex: 100%;
+                padding: 30px;
+            }
+
+            h1 {
+                font-weight: 400;
+                color: navy;
+            }
+
+            p {
+                color: rgb(72, 72, 72);
+            }
+
+            .links {
+                display: flex;
+                margin-top: 10px;
+                gap: 10px;
+
+                .link {
+                    text-decoration: none;
+                    color: #abd699;
+                    padding: 5px 10px;
+                    background: rgb(22, 18, 63);
+                    background: linear-gradient(0deg, rgba(22, 18, 63, 1) 0%, rgba(50, 41, 147, 1) 100%);
+                    box-shadow: 0px 2px 5px #a6a9a5;
+                    border-radius: 3px;
+                }
+
+                .link:hover {
+                    color: #75c9b7;
+                    background: rgb(22, 18, 63);
+                    background: linear-gradient(180deg, rgba(22, 18, 63, 1) 0%, rgba(50, 41, 147, 1) 100%);
+                }
+
+            }
+
+            h3 {
+                font-weight: 400;
+                color: navy;
+                margin-top: 20px;
+            }
+
+            ol {
+                list-style: lower-roman;
+                margin-left: 0.5em;
+
+                li {
+                    margin: 0.5em;
+                    padding-left: 1.5em;
+                    color: rgb(74, 74, 74);
+                }
+            }
+        }
+
+        .cardRight {
+            flex: 1;
+
+            .tech {
+                margin-top: 1rem;
+
+                h3 {
+                    color: navy;
+                    font-weight: 400;
+                }
+
+                p {
+                    color: gray;
+                }
+
+            }
+
+
+            .container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .react {
+                    width: 11rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 11rem;
+                    animation: anim__rotate 8.2s linear infinite;
+
+                    &__spoke {
+                        position: absolute;
+                        border: .2rem $col solid;
+                        height: 2rem;
+                        width: 5rem;
+                        border-radius: 250%;
+
+                        &--0 {}
+
+                        &--1 {
+                            transform: rotate(60deg);
+
+                        }
+
+                        &--2 {
+                            transform: rotate(-60deg);
+
+                        }
+
+                        &--3 {
+                            height: 2rem;
+                            width: 2rem;
+                            background-color: $col;
+                            border-radius: 50%;
+                            position: absolute;
+                            text-align: center;
+                            animation: rotate 8.2s linear infinite;
+
+                            p {
+                                font-weight: 800;
+                                color: white;
+                            }
+                        }
+
+                        @keyframes rotate {
+                            0% {
+
+                                transform: rotate3d(1, 1, 1, 360deg);
+                            }
+
+                            100% {
+
+                                transform: rotate3d(0, 0, 0, 0deg);
+                            }
+
+                        }
+
+
+                    }
+                }
+
+                @keyframes anim__rotate {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            }
+
+            @media screen and (max-width: 576px) {
+                flex: 100%;
+
+            }
+
+        }
+
+        .youVid {
+            flex: 100%;
+            margin: 5% 0;
+
+            .vid {
+                width: 100%;
+            }
+        }
+
+    }
+}
