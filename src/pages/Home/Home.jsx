@@ -16,7 +16,6 @@ const Home = () => {
         };
     }, []);
     const vol = scrollTop / 500 < 1 ? scrollTop / 500 : 1
-    console.log(vol)
     //const scale = 1 - (scrollTop / 1000)
     //const opacity = 1 - (scrollTop / 1000)
 
