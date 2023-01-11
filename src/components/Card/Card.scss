@@ -167,18 +167,15 @@ $col: #55DBF8;
 
             @media screen and (max-width: 576px) {
                 flex: 100%;
-
+                margin: 30px;
             }
 
         }
 
         .youVid {
             flex: 100%;
-            margin: 5% 0;
+            margin: 5% 2%;
 
-            .vid {
-                width: 100%;
-            }
         }
 
     }
