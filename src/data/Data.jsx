@@ -48,7 +48,7 @@ const Data = [
             "By clicking on prewiew you will see your note result.",
         ],
         tech: "For creating this app I added libraries like mde and split. I just have to adjust the side bar and writing preview area. Big thing is to store the notes on local storage with id, for that i used nanoid to retrieve the the data with id and organize latest first.",
-        vid: "vid url",
+        vid: "9qv45YGkvEU",
         appBtn: "/notes",
         codeBtn: "github"
     }
