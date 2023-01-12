@@ -31,7 +31,7 @@ const Card = (props) => {
 
                         <div className='links'>
                             <Link className='link' onClick={() => scrollToTop()} to={item.appBtn}>Go to app</Link>
-                            <Link className='link' to={item.codeBtn}>Go to code</Link>
+                            <a className='link' href={item.codeBtn}>Go to code</a>
                         </div>
                     </div>
                     <div className='cardRight'>
