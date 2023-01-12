@@ -13,7 +13,7 @@ const Data = [
         tech: "I created a useState hook to get the category, number of questions, and difficulty level. The input for these hooks is taken from the HTML selected tag input value. To retrieve the questions, enter these values into the request url (open trivia db). The Start Quiz button launches the app and searches for components. I converted the fetched data into a usable format and pushed it into a new array for easy use. It passes props to the next component. 1. data; 2. loading; 3. error; This page receives the props from the fetch component. If the loading is false and there is no error, It's to iterate over the data for questions and answers. This page is in charge of displaying the questions and answer options. On this page, you can select the choices that are created with a radio input tag. Input tag value data is submitted to handle the Submit function, where it evaluates the correct answers and scores. It stores the correct answers in useState variables after evaluating and scoring them. From there, I am able to get the values of variables and show the score on the page. Finally, click the submit button to convert to the Try Again button, which will use the Navigate hook to take you back to the landing page.",
         vid: "pHqEuj4LIMI",
         appBtn: "/quiz",
-        codeBtn: "github"
+        codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Quiz"
     },
     {
         heading: "Tenzies",
@@ -34,7 +34,7 @@ const Data = [
         tech: "One challenge I may have faced while working on this project has been implementing the logic for selecting and holding the dice. This has involved creating a way for the player to select individual dice and storing that information as the game progresses. Another challenge has been implementing the roll button and ensuring that the dice are randomly generated each time it is clicked and hold selected dice positions.",
         vid: "mO955G7wgp8",
         appBtn: "/tenzies",
-        codeBtn: "github"
+        codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Tenzies"
     },
     {
         heading: "Notes",
@@ -50,7 +50,7 @@ const Data = [
         tech: "For creating this app I added libraries like mde and split. I just have to adjust the side bar and writing preview area. Big thing is to store the notes on local storage with id, for that i used nanoid to retrieve the the data with id and organize latest first.",
         vid: "9qv45YGkvEU",
         appBtn: "/notes",
-        codeBtn: "github"
+        codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Notes"
     }
 
 ]
