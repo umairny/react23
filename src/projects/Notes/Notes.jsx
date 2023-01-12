@@ -1,4 +1,4 @@
-import React from "react"
+import { useState, useEffect } from "react"
 import Sidebar from "./comp/Sidebar"
 import Editor from "./comp/Editor"
 import Split from "react-split"
@@ -6,16 +6,15 @@ import { nanoid } from "nanoid"
 import './notes.css'
 import "react-mde/lib/styles/css/react-mde-all.css";
 
-
 export default function Notes() {
-    const [notes, setNotes] = React.useState(
+    const [notes, setNotes] = useState(
         () => JSON.parse(localStorage.getItem("notes")) || []
     )
-    const [currentNoteId, setCurrentNoteId] = React.useState(
+    const [currentNoteId, setCurrentNoteId] = useState(
         (notes[0] && notes[0].id) || ""
     )
 
-    React.useEffect(() => {
+    useEffect(() => {
         localStorage.setItem("notes", JSON.stringify(notes))
     }, [notes])
 
