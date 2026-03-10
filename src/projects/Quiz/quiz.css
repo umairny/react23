@@ -1,248 +1,211 @@
-.start,
-.quiz {
-  max-width: 800px;
-  min-height: 80vh;
-  background-color: #f5f7fb;
-  color: #293264;
-  position: relative;
-  margin: 15px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.quiz-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 85vh;
+    padding: 2rem;
 }
 
-.content {
-  text-align: center;
-  letter-spacing: 3px;
-  line-height: 30px;
+.quiz-card, .quiz-container {
+    max-width: 800px;
+    width: 100%;
+    padding: 3rem;
+    border-radius: 24px;
+    text-align: center;
 }
 
-.topRect,
-.topRectQuiz {
-  position: absolute;
-  top: 0;
-  right: 0;
+.quiz-header {
+    margin-bottom: 2.5rem;
+    
+    h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .quiz-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
 }
 
-.botRect,
-.botRectQuiz {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+.quiz-config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 500px;
+    margin: 0 auto;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        width: 100%;
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:focus {
+                outline: none;
+                border-color: var(--primary);
+                background: white;
+            }
+        }
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+
+    .start-btn {
+        margin-top: 1rem;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
 }
 
-.botRectQuiz,
-.topRectQuiz {
-  width: 100px;
+.quiz-credits {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+
+    a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 
-.but {
-  background-color: #4d5b9e;
-  color: #f5f7fb;
-  border: none;
-  border-radius: 15px;
-  width: 190px;
-  height: 50px;
-  margin: 10px auto;
-  display: block;
+/* Quiz Content Styles */
+.question-block {
+    text-align: left;
+    margin-bottom: 3rem;
+    animation: fadeIn 0.5s ease backwards;
+
+    &:last-child { margin-bottom: 2rem; }
+
+    .question-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.4;
+        margin-bottom: 1.25rem;
+    }
 }
 
-.subBut {
-  background-color: #4d5b9e;
-  color: #f5f7fb;
-  border: none;
-  border-radius: 15px;
-  padding: 10px 25px;
-  margin: 5px;
+.answers-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
-.but:hover,
-.subBut:hover {
-  cursor: pointer;
-  background-color: #293264;
+.answer-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 12px;
+    border: 1.5px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover:not(:disabled) {
+        background: rgba(99, 102, 241, 0.1);
+        transform: translateY(-2px);
+    }
+
+    &.selected {
+        background: var(--primary);
+        color: white;
+    }
+
+    &.correct {
+        background: #94D7A2;
+        border-color: #94D7A2;
+        color: #293264;
+    }
+
+    &.wrong {
+        background: #F8BCBC;
+        border-color: #F8BCBC;
+        color: #293264;
+        opacity: 0.7;
+    }
+
+    &.dimmed {
+        opacity: 0.5;
+        border-color: var(--glass-border);
+        color: var(--text-secondary);
+    }
 }
 
-.qBox {
-  padding: 10%;
-  z-index: 19;
+.quiz-footer {
+    border-top: 1px solid var(--glass-border);
+    padding-top: 2rem;
+    display: flex;
+    justify-content: center;
+
+    .results-area {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        .score-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+
+            .highlight {
+                color: var(--primary);
+                font-size: 1.5rem;
+            }
+        }
+    }
+
+    .check-btn {
+        padding: 0.8rem 2.5rem;
+        
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+    }
 }
 
-.question {
-  letter-spacing: 0.6px;
-  margin: 10px 0;
-  position: relative;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-select {
-  padding: 5px 5px;
-  margin: 5px 5px;
-  border-radius: 5px;
-  border: 1px solid #d6dbf5;
-  color: #293264;
-  display: block;
-}
-
-.main-label {
-  display: block;
-  float: left;
-  letter-spacing: 0px;
-  margin-right: 10px;
-}
-
-.rad-input {
-  display: inline;
-}
-
-.radio-toolbar {
-  margin: 10px;
-}
-
-.radio-toolbar input[type="radio"] {
-  opacity: 0;
-  position: fixed;
-  width: 0;
-}
-
-.radio-toolbar label {
-  display: inline-block;
-  background-color: #f5f7fb;
-  padding: 5px 15px;
-  border: 1px solid #4d5b9e;
-  border-radius: 10px;
-  cursor: pointer;
-  margin: 5px;
-}
-
-.radio-toolbar label:hover {
-  background-color: #d6dbf5;
-}
-
-.radio-toolbar input[type="radio"]:checked+label {
-  background-color: #d6dbf5;
-  border-color: #d6dbf5;
-}
-
-hr {
-  border: 1px #d6dbf5 solid;
-}
-
-.score {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  color: #4d5b9e;
-  background-color: #d6dbf5;
-  padding: 5px 10px;
-  border-radius: 15px;
-}
-
-.correct {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.5);
-  top: 0;
-  right: 0;
-  z-index: 50;
-}
-
-.good,
-.bad {
-  position: absolute;
-  right: 2%;
-  top: 30%;
-}
-
-.good {
-  background-color: rgba(0, 200, 0, 0.5);
-  padding: 5px 15px;
-  border-radius: 15px;
-  color: white;
-  text-shadow: 0px 0px 4px black;
-}
-
-.bad {
-  background-color: rgba(255, 0, 0, 0.5);
-  padding: 5px 15px;
-  border-radius: 15px;
-  color: white;
-  text-shadow: 0px 0px 4px black;
-}
-
-/*Error page style*/
-.error,
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column-reverse;
-  gap: 10px;
-  min-height: 100vh;
-}
-
-.error {
-  color: red;
-}
-
-.loading {
-  color: #4d5b9e;
-}
-
-/* footer powered by */
-.power-by {
-  color: #293264;
-  text-align: center;
-  font-size: x-small;
-  padding: 5px;
-  margin: 5px;
-}
-
-.power-by a {
-  color: #3498db;
-  text-decoration: none;
-}
-
-/* Loading page style Ring */
-.loading-spin {
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 150px;
-  height: 150px;
-  -webkit-animation: spin 2s linear infinite;
-  /* Safari */
-  animation: spin 2s linear infinite;
-}
-
-/* Safari */
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@media screen and (max-width: 800px) {
-
-  .start,
-  .quiz {
-    margin: 15px 10px;
-  }
-
-  .subBut {
-    margin-bottom: 25px;
-  }
+@media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+    .results-area { flex-direction: column; gap: 1rem; }
+    .answer-btn { width: 100%; }
 }

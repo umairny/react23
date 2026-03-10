@@ -1,82 +1,51 @@
 .footer {
+    margin-top: 4rem;
+    padding: 3rem 0;
     width: 100%;
-    background: rgb(134, 235, 213);
-    background: linear-gradient(0deg, rgba(134, 235, 213, 1) 0%, rgba(117, 201, 183, 1) 100%);
-    color: #16123f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 0;
-    box-shadow: 0px -2px 5px #9da29b;
+    border-top: 1px solid var(--glass-border);
 
-    .wrapper {
-        width: 70%;
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
         display: flex;
         justify-content: space-between;
+        align-items: center;
 
-        .heading {
+        @media screen and (max-width: 768px) {
+            flex-direction: column;
+            gap: 2rem;
+            text-align: center;
+        }
 
-            h2 {
-                font-weight: 400;
-                margin-bottom: 5px;
+        .footer-left {
+            .copyright {
+                font-weight: 600;
+                color: var(--text-primary);
+                font-size: 1rem;
+            }
+            .location {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
             }
         }
 
-        .links {
+        .social-links {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
+            gap: 2rem;
 
-            @media screen and (max-width:600px) {
-                flex-direction: column;
-            }
+            .social-link {
+                color: var(--text-secondary);
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 0.95rem;
+                transition: color 0.3s ease;
 
-            .twitter,
-            .youtube,
-            .linkedin {
-                display: flex;
-                width: 40px;
-                height: 30px;
-                background-size: contain;
-                background-position: center;
-                background-repeat: no-repeat;
-                cursor: pointer;
-            }
-
-            .twitter {
-                background-image: url('/twitter.svg');
-            }
-
-            .twitter:hover {
-                background-image: url('/twitterhover.svg');
-            }
-
-            .linkedin {
-                background-image: url('/linkedin.svg');
-            }
-
-            .linkedin:hover {
-                background-image: url('/linkedinhover.svg');
-            }
-
-            .youtube {
-                background-image: url('/youtube.svg');
-            }
-
-            .youtube:hover {
-                background-image: url('/youtubehover.svg');
-            }
-
-            .item {
-                a {
-                    text-decoration: none;
+                &:hover {
+                    color: var(--primary);
                 }
-
             }
         }
     }
-
-
 }

@@ -55,14 +55,14 @@ export default function Notes() {
     }
 
     return (
-        <main className="notes">
+        <main className="notes-container glass">
             {
                 notes.length > 0
                     ?
                     <Split
-                        sizes={[30, 70]}
+                        sizes={[25, 75]}
                         direction="horizontal"
-                        className="split"
+                        className="notes-split"
                     >
                         <Sidebar
                             notes={notes}
@@ -81,16 +81,19 @@ export default function Notes() {
                         }
                     </Split>
                     :
-                    <div className="no-notes">
-                        <h1>You have no notes</h1>
-                        <button
-                            className="first-note"
-                            onClick={createNewNote}
-                        >
-                            Create one now
-                        </button>
+                    <div className="notes-empty-state">
+                        <div className="empty-content">
+                            <h1 className="gradient-text">Capture your thoughts</h1>
+                            <p>Start your journey by creating your first note.</p>
+                            <button
+                                className="btn btn-primary new-note-btn"
+                                onClick={createNewNote}
+                            >
+                                <span className="plus-icon">+</span>
+                                <span className="btn-text">Create New Note</span>
+                            </button>
+                        </div>
                     </div>
-
             }
         </main>
     )

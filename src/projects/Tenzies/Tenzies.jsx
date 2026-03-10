@@ -1,68 +1,56 @@
 import './Tenzies.css'
-import React from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Die from "./comp/Die"
 import { nanoid } from "nanoid"
 import Confetti from "react-confetti"
 
 export default function Tenzies() {
+    const levels = {
+        1: { diceCount: 10, label: "Beginner" },
+        2: { diceCount: 12, label: "Expert" },
+        3: { diceCount: 15, label: "Legend" }
+    }
 
-    const [dice, setDice] = React.useState(allNewDice())
-    const [tenzies, setTenzies] = React.useState(false)
-    const [count, setCount] = React.useState(0)
-
-    //Timer stop watch state
-    const [timer, setTimer] = React.useState(0)
-    const increment = React.useRef(null)
-
-    //best  score state
-    //get the store values
-    var clicks = JSON.parse(localStorage.getItem("clicks"))
-    var duration = JSON.parse(localStorage.getItem("time"))
-    var bestUser = JSON.parse(localStorage.getItem("user"))
-    const [best, setBest] = React.useState({
-        clicks: clicks,
-        totalTime: duration,
-        user: ""
+    const [currentLevel, setCurrentLevel] = useState(1)
+    const [dice, setDice] = useState(() => allNewDice(levels[1].diceCount))
+    const [tenzies, setTenzies] = useState(false)
+    const [rolls, setRolls] = useState(0)
+    const [timer, setTimer] = useState(0)
+    const [isGameActive, setIsGameActive] = useState(false)
+    const [bestScores, setBestScores] = useState(() => {
+        return JSON.parse(localStorage.getItem("tenzies_best_scores")) || {}
     })
-    //console.log(clicks)
+    
+    const timerRef = useRef(null)
 
-    React.useEffect(() => {
+    useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
         const firstValue = dice[0].value
         const allSameValue = dice.every(die => die.value === firstValue)
+        
         if (allHeld && allSameValue) {
             setTenzies(true)
+            setIsGameActive(false)
+            clearInterval(timerRef.current)
+            updateBestScores()
         }
-        if (count === 0) {
-            setBest(pre => ({
-                ...pre,
-                user: ""
-            }))
-        }
-        //Set the best score
-        if (tenzies === true) {
-            if (clicks === null) {
-                localStorage.setItem("clicks", JSON.stringify(count))
-                localStorage.setItem("time", JSON.stringify(timer))
-                localStorage.setItem("user", JSON.stringify(best.user))
-                setBest({
-                    clicks: count,
-                    totalTime: timer,
-                })
+    }, [dice])
 
-            } else if (clicks > count && duration > timer) {
-                localStorage.setItem("clicks", JSON.stringify(count))
-                localStorage.setItem("time", JSON.stringify(timer))
-                localStorage.setItem("user", JSON.stringify(best.user))
-                setBest({
-                    clicks: count,
-                    totalTime: timer,
-                })
-            }
+    function updateBestScores() {
+        const currentBest = bestScores[currentLevel] || { rolls: Infinity, time: Infinity }
+        const newBest = {
+            rolls: Math.min(currentBest.rolls, rolls),
+            time: Math.min(currentBest.time, timer)
         }
-    }, [dice, tenzies])
-    //console.log(dice)
-    //New die 
+        
+        const updatedScores = {
+            ...bestScores,
+            [currentLevel]: newBest
+        }
+        setBestScores(updatedScores)
+        localStorage.setItem("tenzies_best_scores", JSON.stringify(updatedScores))
+    }
+
     function generateNewDie() {
         return {
             value: Math.ceil(Math.random() * 6),
@@ -70,55 +58,66 @@ export default function Tenzies() {
             id: nanoid()
         }
     }
-    //all dice
-    function allNewDice() {
+
+    function allNewDice(count) {
         const newDice = []
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < count; i++) {
             newDice.push(generateNewDie())
         }
         return newDice
     }
-    //Roll dice all
+
+    function startGame() {
+        setTenzies(false)
+        setRolls(0)
+        setTimer(0)
+        setDice(allNewDice(levels[currentLevel].diceCount))
+        setIsGameActive(true)
+        
+        clearInterval(timerRef.current)
+        timerRef.current = setInterval(() => {
+            setTimer(prev => prev + 1)
+        }, 1000)
+    }
+
     function rollDice() {
         if (!tenzies) {
             setDice(oldDice => oldDice.map(die => {
-                return die.isHeld ?
-                    die :
-                    generateNewDie()
+                return die.isHeld ? die : generateNewDie()
             }))
-
-            //Total number button clicked
-            setCount(oldcount => oldcount + 1)
-
-            //Start Timer
-            if (count === 0) {
-                increment.current = setInterval(() => {
-                    setTimer((timer) => timer + 1)
-                }, 1000)
-            }
+            setRolls(prev => prev + 1)
         } else {
-            setTenzies(false)
-            setDice(allNewDice())
-
-            //num of click reset
-            setCount(0)
-
-            //timer reset
-            clearInterval(increment.current)
-            setTimer(0)
+            startGame()
         }
     }
 
-    //Hold dice position
     function holdDice(id) {
+        if (!isGameActive && !tenzies) {
+            // Auto start on first die click
+            startGame()
+        }
         setDice(oldDice => oldDice.map(die => {
-            return die.id === id ?
-                { ...die, isHeld: !die.isHeld } :
-                die
+            return die.id === id ? { ...die, isHeld: !die.isHeld } : die
         }))
     }
 
-    //Dice Elements props
+    function changeLevel(level) {
+        const l = parseInt(level)
+        setCurrentLevel(l)
+        setTenzies(false)
+        setIsGameActive(false)
+        setRolls(0)
+        setTimer(0)
+        setDice(allNewDice(levels[l].diceCount))
+        clearInterval(timerRef.current)
+    }
+
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60)
+        const secs = seconds % 60
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`
+    }
+
     const diceElements = dice.map(die => (
         <Die
             key={die.id}
@@ -128,110 +127,59 @@ export default function Tenzies() {
         />
     ))
 
-    //format time H : M : S
-    const formatTime = (x) => {
-        const getSeconds = `0${(x % 60)}`.slice(-2)
-        const minutes = `${Math.floor(x / 60)}`
-        const getMinutes = `0${minutes % 60}`.slice(-2)
-        const getHours = `0${Math.floor(x / 3600)}`.slice(-2)
-
-        //Full Houre min sec return `${getHours} : ${getMinutes} : ${getSeconds}`
-        //min and sec only
-        return `min ${getMinutes} : ${getSeconds} sec`
-    }
-
-    //input change handle
-    function handleChange(event) {
-        const { name, value, type, checked } = event.target
-        setBest(prevFormData => {
-            return {
-                ...prevFormData,
-                [name]: type === "checkbox" ? checked : value
-            }
-        })
-    }
-    //setting input 
-    function handleSubmit(event) {
-        event.preventDefault()
-        //console.log(best.user)
-        if (best.user === "") {
-            alert("Enter your name")
-        } else {
-            rollDice()
-        }
-    }
-    //Handle Clear Reset
-    function clear() {
-        setBest({
-            clicks: 0,
-            totalTime: 0,
-            user: ""
-        })
-        localStorage.clear()
-    }
-
-
-    let btnText
-    if (tenzies) {
-        btnText = "New Game"
-    } else if (count === 0) {
-        btnText = "Start"
-    } else {
-        btnText = "Roll"
-    }
+    const levelBest = bestScores[currentLevel]
 
     return (
-        <main className='main'>
-            <div className="tenzies">
-
+        <main className="tenzies-page">
+            <div className="tenzies-container glass">
                 {tenzies && <Confetti />}
-                <h1 className="tenTitle">Tenzies</h1>
-                <p className="instructions">Roll until all dice are the same.
-                    Click each die to freeze it at its current value between rolls.</p>
+                
+                <header className="tenzies-header">
+                    <h1 className="gradient-text">Tenzies</h1>
+                    <p className="instructions">
+                        Roll until all dice are the same. Click each die to freeze it.
+                    </p>
+                </header>
 
-                <p>Best score by :  <strong style={{ color: 'red' }}>{bestUser ? bestUser : ""}</strong>  <br />
-                    {clicks ? best.clicks : "0"} clicks in {duration ? (formatTime(best.totalTime)) : "0"}</p>
-
-                <h4>Total clicks {count}
-                    <span style={{
-                        backgroundColor: '#5035FF',
-                        color: 'white', borderRadius: '5px', padding: '5px', margin: '5px'
-                    }}>
-                        in {tenzies && clearInterval(increment.current)}{formatTime(timer)}</span>
-                </h4>
-
-                <h4>Good Luck! <span style={{ color: 'red' }}> <em> {best.user && best.user} </em> </span></h4>
-
-                <div className="dice-container">
-                    {(count > 0 && !tenzies) && diceElements}
+                <div className="levels-track">
+                    {Object.keys(levels).map(lvl => (
+                        <button 
+                            key={lvl}
+                            className={`level-btn ${currentLevel === parseInt(lvl) ? 'active' : ''}`}
+                            onClick={() => changeLevel(lvl)}
+                        >
+                            Level {lvl}: {levels[lvl].label}
+                        </button>
+                    ))}
                 </div>
 
-                {(count === 0) ?
-                    <div className='form-input'>
-                        <label htmlFor="user">Enter Name</label>
-                        <input
-                            type="text"
-                            name="user"
-                            placeholder="Enter your name"
-                            value={best.user ? best.user : ""}
-                            onChange={handleChange}
-                            required
-                        />
-                        <button className="roll-dice" onClick={handleSubmit}>
-                            {btnText}
-                        </button>
-                        <button className="roll-dice" style={{ backgroundColor: 'red', margin: '10px' }} onClick={clear}>Reset</button>
+                <div className="stats-board">
+                    <div className="stat-item">
+                        <span className="stat-label">Rolls</span>
+                        <span className="stat-value">{rolls}</span>
                     </div>
-                    :
-                    <div>
-                        <button className="roll-dice" onClick={rollDice}>
-                            {btnText}
-                        </button>
+                    <div className="stat-item">
+                        <span className="stat-label">Time</span>
+                        <span className="stat-value">{formatTime(timer)}</span>
                     </div>
-                }
+                    {levelBest && levelBest.rolls !== Infinity && (
+                        <div className="stat-item best">
+                            <span className="stat-label">Best</span>
+                            <span className="stat-value">{levelBest.rolls} rolls / {formatTime(levelBest.time)}</span>
+                        </div>
+                    )}
+                </div>
 
+                <div className={`dice-grid level-${currentLevel}`}>
+                    {diceElements}
+                </div>
 
-
+                <button 
+                    className="btn btn-primary roll-btn" 
+                    onClick={tenzies ? startGame : rollDice}
+                >
+                    {tenzies ? "Play Again" : (isGameActive ? "Roll Dice" : "Start Game")}
+                </button>
             </div>
         </main>
     )

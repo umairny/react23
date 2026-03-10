@@ -1,54 +1,48 @@
 const Data = [
     {
         heading: "Quizzical",
-        detail: "I created the Quizzical App because I wanted to have a way to show off my portfolio in a fun and interactive way. The app features a quiz that tests your knowledge. I think it's a great way for potential employers to see what I know and what I can do. Plus, it's just really fun!",
+        detail: "A dynamic and interactive quiz application designed to test general knowledge while showcasing smooth UI transitions. Users can customize their experience by selecting categories, difficulty levels, and the number of questions.",
         features: [
-            "On the landing page you can select 1. Category, 2. Total number of questions, 3. Difficulty level",
-            "The start quiz button will take you to the quiz page",
-            "After selecting the choices you think are correct click submit.",
-            "After submitting you can see correct(green) and wrong(red) answers.",
-            "After submitting on the bottom right corner of the app, your score will be displayed with % accuracy.",
-            "Submit button changed to the try again button. Click the try again button to go back to the start page."
+            "Customizable starting options: Category, Question Count, and Difficulty.",
+            "Real-time scoring system with accuracy percentage display.",
+            "Visual feedback for correct and incorrect answers after submission.",
+            "Seamless navigation flow between configuration and the quiz interface."
         ],
-        tech: "I created a useState hook to get the category, number of questions, and difficulty level. The input for these hooks is taken from the HTML selected tag input value. To retrieve the questions, enter these values into the request url (open trivia db). The Start Quiz button launches the app and searches for components. I converted the fetched data into a usable format and pushed it into a new array for easy use. It passes props to the next component. 1. data; 2. loading; 3. error; This page receives the props from the fetch component. If the loading is false and there is no error, It's to iterate over the data for questions and answers. This page is in charge of displaying the questions and answer options. On this page, you can select the choices that are created with a radio input tag. Input tag value data is submitted to handle the Submit function, where it evaluates the correct answers and scores. It stores the correct answers in useState variables after evaluating and scoring them. From there, I am able to get the values of variables and show the score on the page. Finally, click the submit button to convert to the Try Again button, which will use the Navigate hook to take you back to the landing page.",
+        tech: "Built using React's functional components and hooks (`useState`, `useEffect`). Integrated the Open Trivia DB API for dynamic question fetching. Developed custom scoring logic and managed application state to handle user selections and result evaluation.",
         vid: "pHqEuj4LIMI",
+        image: "/mockups/quizzical.png",
         appBtn: "/quiz",
         codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Quiz"
     },
     {
         heading: "Tenzies",
-        detail: "I created this React project, a fun and engaging game that tests the player's luck and strategy.",
+        detail: "A Fast-paced dice game that combines luck and strategy. Players aim to roll and freeze dice until all match, tracking their speed and roll counts to set new personal records.",
         features: [
-            "On the start page the user can find the name of the person who has the best score.",
-            "How many times he clicked and how much time it took to complete the game.",
-            "Under that it shows the current click and time in seconds.",
-            "Good luck to the new user when type name it will show after Good luck!",
-            "Enter the name and click start to start the new game.",
-            "As the user will start the game the timer will start and also it will count all clicks when you click on the Roll button.",
-            "The user has to select all the same number dice to finish the game.",
-            "When the user selects the same dice and clicks the Roll button will change the unselected dice.",
-            "Keep selecting the same dice and Roll button until you select all the same dice.",
-            "By clicking the new game button will take the user to the start page.",
-            "Reset button will remove any saved user and its score from the game."
+            "User profile management and local leaderboard for high scores.",
+            "Live timer and roll counter to track player performance.",
+            "Dice freezing mechanic to strategically hold numbers.",
+            "Interactive celebration effects upon winning (Confetti).",
+            "Responsive game state with reset and memory clear options."
         ],
-        tech: "One challenge I may have faced while working on this project has been implementing the logic for selecting and holding the dice. This has involved creating a way for the player to select individual dice and storing that information as the game progresses. Another challenge has been implementing the roll button and ensuring that the dice are randomly generated each time it is clicked and hold selected dice positions.",
+        tech: "Implemented complex game state logic using React hooks. Leveraged local storage for data persistence across sessions. Integrated `react-confetti` for an enhanced win-state experience and utilized nanoid for efficient unique identifier management.",
         vid: "mO955G7wgp8",
+        image: "/mockups/tenzies.png",
         appBtn: "/tenzies",
         codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Tenzies"
     },
     {
         heading: "Notes",
-        detail: "I created the Notes app with scrimba course because I wanted to have a way to show off my portfolio in a fun and interactive way.",
+        detail: "A powerful Markdown-based note-taking application. Features a split-pane interface and real-time preview, allowing for organized writing and instant visualization of formatted content.",
         features: [
-            "On the start page if you have 0 notes it will show you to create new note.",
-            "If you have any saved notes app will start and show all the save notes on left sidebar.",
-            "Left side bar click + button to create a new note.",
-            "Righ side you can write notes in markdown lagnuage.",
-            "Righ side you have write options like word app which help you to create your note in markdown language.",
-            "By clicking on prewiew you will see your note result.",
+            "Modern Markdown editor with a toolbar for common formatting.",
+            "Instant preview mode to visualize formatted output.",
+            "Auto-save functionality with local storage persistence.",
+            "Dynamic sidebar for quick note management and organization.",
+            "Split-view layout for efficient multi-tasking and previewing."
         ],
-        tech: "For creating this app I added libraries like mde and split. I just have to adjust the side bar and writing preview area. Big thing is to store the notes on local storage with id, for that i used nanoid to retrieve the the data with id and organize latest first.",
+        tech: "Integrated `react-mde` for Markdown editing and `showdown` for HTML conversion. Used `react-split` for the adjustable multi-pane layout. Managed data persistence and ordering to ensure the most recently edited notes appear first.",
         vid: "9qv45YGkvEU",
+        image: "/mockups/notes.png",
         appBtn: "/notes",
         codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Notes"
     }

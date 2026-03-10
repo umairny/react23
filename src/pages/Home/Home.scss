@@ -1,50 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&display=swap');
 
 .home {
-    max-width: 1024px;
+    max-width: 1200px;
     min-height: 100vh;
-    margin: auto;
-    padding: 10px;
-    font-family: "Playfair Display", serif;
-    overflow: hidden;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
 
-    .main-title {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        font-size: 2.5em;
-        font-weight: 400;
-        max-width: 600px;
-        margin: 10% auto;
-        padding: 10%;
-        animation: focus-in-contract 1s ease 0s 1 normal none;
+    .hero-content {
+        text-align: left;
+        max-width: 800px;
+        animation: hero-appear 1s cubic-bezier(0.2, 0.8, 0.2, 1);
 
-        @keyframes focus-in-contract {
-
-            0% {
-                letter-spacing: 1em;
-                filter: blur(12px);
-                opacity: 0;
-            }
-
-            100% {
-                filter: blur(0);
-                opacity: 1;
-            }
-        }
-
-        .head {
-            font-family: "Playfair Display", serif;
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--primary);
             font-weight: 600;
-            font-size: 1.5em;
-            font-style: italic;
-            color: navy;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
 
-        .para {
-            color: rgb(0, 0, 191);
-            font-family: "Playfair Display", serif;
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
         }
+
+        .hero-description {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.6;
+
+            .highlight {
+                color: var(--text-primary);
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+@keyframes hero-appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

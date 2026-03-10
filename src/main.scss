@@ -1,31 +1,90 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;800&display=swap');
+:root {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --secondary: #10b981;
+  --bg-dark: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --accent: #f59e0b;
+  --glass-bg: rgba(255, 255, 255, 0.4);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --font-heading: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
 
 * {
-    margin: 0;
-    padding: 0;
-    font-family: Inter Tight, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-    background: url(/bg1.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+  scroll-behavior: smooth;
+  background-color: var(--bg-dark);
 }
 
 body {
-    color: #16123f;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/*
-Light Lime: #abd699
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
 
-Fresh Lemon: #ffe26a
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
 
-Teal: #75c9b7
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  gap: 0.5rem;
+  font-size: 1rem;
 
-Mint: #c7ddcc
+  &:active {
+    transform: scale(0.98);
+  }
+}
 
-Navy: #16123f
-*/
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #7c3aed 100%);
+  }
+}

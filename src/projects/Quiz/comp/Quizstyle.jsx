@@ -1,110 +1,90 @@
 import topImg from '../images/topblobs.png'
 import botImg from '../images/bottomblobs.png'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 export default function QuizStyle(props) {
-    //console.log(props.data)
-    const [formData, setFormData] = useState([])
-    const [count, setCount] = useState(0)
-    const [results, setResults] = useState(false)
-    const [selecArr, setSelecArr] = useState([])
+    const [selections, setSelections] = useState({})
+    const [score, setScore] = useState(0)
+    const [isFinished, setIsFinished] = useState(false)
 
-    const navigate = useNavigate()
-    const refreshPage = () => {
-        navigate(0);
+    function handleSelection(questionId, answer) {
+        if (!isFinished) {
+            setSelections(prev => ({
+                ...prev,
+                [questionId]: answer
+            }))
+        }
     }
 
-    function handleChange(event) {
-        const { name, value } = event.target
-        setFormData(prevFormData => {
-            return {
-                ...prevFormData,
-                [name]: value
+    function checkAnswers() {
+        let correctCount = 0
+        props.data.forEach(q => {
+            if (selections[q.id] === q.correctAnswer) {
+                correctCount++
             }
         })
-        //console.log(formData);
-    }
-    //Submit and view the results
-    function handleSubmit(event) {
-        event.preventDefault()
-        // correct answers array
-        var correct = props.data.map(c => c.cor)
-        // console.log(formData)
-        // console.log(correct)
-        //coming form input array
-        var newArr = []
-        for (const key in formData) {
-            const value = formData[key]
-            newArr.push(value)
-        }
-        //console.log(newArr)
-        //console.log(correct)
-        //Compare array
-        var inter = newArr.filter(function (e) {
-            return correct.indexOf(e) > -1;
-        });
-        //console.log(inter);
-        setSelecArr(inter)
-        setCount(inter.length)
-        setResults(true)
+        setScore(correctCount)
+        setIsFinished(true)
     }
 
-    function tryagain(event) {
-        event.preventDefault()
-        refreshPage()
+    function resetQuiz() {
+        window.location.reload()
     }
 
     return (
-        <div className="quiz">
-            <img className='topRectQuiz' src={topImg} alt={topImg} />
-            <img className='botRectQuiz' src={botImg} alt={botImg} />
-
-            <form className='qBox' onSubmit={results ? tryagain : handleSubmit}>
+        <div className="quiz-container glass">
+            <div className='quiz-content'>
                 {props.data.map((item, index) => (
-                    <div key={index}>
-                        <div className='question'>
-                            <h4 dangerouslySetInnerHTML={{ __html: item.que }}></h4>
-                            <div className="radio-toolbar">
-                                {item.ans.map((ans, i) => (
-                                    <div className='rad-input' key={i}>
-                                        <input
-                                            type="radio"
-                                            id={`${ans}-${item.id}`}
-                                            name={item.id}
-                                            value={ans}
-                                            disabled={results && true}
-                                            onChange={handleChange}
-                                        />
-                                        <label className='rad-label' htmlFor={`${ans}-${item.id}`} dangerouslySetInnerHTML={{ __html: ans }}></label>
-                                    </div>
-                                ))}
-
-                                {results && <div className='correct'>
-                                    {
-                                        selecArr.includes(`${item.cor}`)
-                                            ?
-                                            (<div className="good">&#x2714; <span dangerouslySetInnerHTML={{ __html: item.cor }}></span></div>)
-                                            :
-                                            (<div className="bad">&#x2716; <span dangerouslySetInnerHTML={{ __html: item.cor }}></span></div>)
-                                    }
-                                </div>
+                    <div key={item.id} className="question-block">
+                        <h4 className="question-text" dangerouslySetInnerHTML={{ __html: item.question }}></h4>
+                        <div className="answers-grid">
+                            {item.answers.map((answer, i) => {
+                                const isSelected = selections[item.id] === answer
+                                const isCorrect = answer === item.correctAnswer
+                                const isWrong = isSelected && !isCorrect
+                                
+                                let statusClass = ""
+                                if (isFinished) {
+                                    if (isCorrect) statusClass = "correct"
+                                    else if (isWrong) statusClass = "wrong"
+                                    else statusClass = "dimmed"
+                                } else if (isSelected) {
+                                    statusClass = "selected"
                                 }
 
-                            </div>
+                                return (
+                                    <button
+                                        key={i}
+                                        className={`answer-btn ${statusClass}`}
+                                        onClick={() => handleSelection(item.id, answer)}
+                                        disabled={isFinished}
+                                        dangerouslySetInnerHTML={{ __html: answer }}
+                                    ></button>
+                                )
+                            })}
                         </div>
-                        <hr />
                     </div>
                 ))}
-                {results ? <>
-                    <button className='subBut' onClick={() => window.scrollTo({ top: 0 })}>Try again</button>
-                </>
-                    :
-                    <button className='subBut'>Submit</button>
-                }
-            </form>
-            {results && <div className='score'>{count} correct out of {props.total} --- {(count / props.total) * 100}%</div>}
+                
+                <footer className="quiz-footer">
+                    {isFinished ? (
+                        <div className="results-area">
+                            <p className="score-text">
+                                You scored <span className="highlight">{score}/{props.total}</span> correct answers
+                            </p>
+                            <button className="btn btn-primary" onClick={resetQuiz}>Play again</button>
+                        </div>
+                    ) : (
+                        <button 
+                            className="btn btn-primary check-btn" 
+                            onClick={checkAnswers}
+                            disabled={Object.keys(selections).length < props.data.length}
+                        >
+                            Check answers
+                        </button>
+                    )}
+                </footer>
+            </div>
         </div>
-
     )
 }

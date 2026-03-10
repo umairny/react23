@@ -5,53 +5,51 @@ import Loading from "./Loading";
 import { nanoid } from "nanoid";
 
 export default function Quizfetch(props) {
-  //console.log(props.url)
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [data, setData] = useState([]);
+  const [quizData, setQuizData] = useState([]);
 
   useEffect(() => {
+    setIsLoaded(false);
     fetch(props.url)
       .then((res) => res.json())
       .then((data) => {
-        //console.log(data.results)
-        setData(data.results);
+        if (data.response_code !== 0) {
+          throw new Error("Failed to fetch questions. Please try different options.");
+        }
+        
+        const processedData = data.results.map((q) => {
+          const id = nanoid();
+          const allAnswers = [...q.incorrect_answers, q.correct_answer];
+          
+          // Fisher-Yates shuffle for stable randomization
+          for (let i = allAnswers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allAnswers[i], allAnswers[j]] = [allAnswers[j], allAnswers[i]];
+          }
+
+          return {
+            id: id,
+            question: q.question,
+            correctAnswer: q.correct_answer,
+            answers: allAnswers
+          };
+        });
+
+        setQuizData(processedData);
         setIsLoaded(true);
       })
       .catch((err) => {
-        console.log(err);
         setError(err);
         setIsLoaded(true);
       });
-  }, []);
-
-  // This fuction takes the fetched data and
-  // convert it into some reuseable data because
-  // fetched data has more information and have
-  // 3 rong and 1 correct answer
-  function newData() {
-    var newAns = [];
-    for (let i = 0; i < data.length; i++) {
-      let que = data.map((q) => q.question);
-      let ans = data.map((q) => q.incorrect_answers.map((a) => a));
-      let cor = data.map((c) => c.correct_answer);
-      var RandNum = Math.floor(Math.random() * 4);
-      ans[i].splice(RandNum, 0, cor[i]);
-
-      newAns.push({ id: nanoid(), que: que[i], cor: cor[i], ans: ans[i] });
-      //ans[i].push(cor[i])
-      //console.log(ans[i])
-      //console.log(cor[i], RandNum)
-    }
-    return newAns;
-  }
-  //console.log(newData())
+  }, [props.url]);
 
   if (error) {
     return <ShowError err={error} />;
   } else if (!isLoaded) {
-    return <Loading loading={isLoaded} />;
+    return <Loading loading={!isLoaded} />;
   } else {
-    return <QuizStyle data={newData()} total={props.totalScore} />;
+    return <QuizStyle data={quizData} total={props.totalScore} />;
   }
 }
