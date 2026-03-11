@@ -10,8 +10,8 @@ const Data = [
         ],
         tech: "Built using React's functional components and hooks (`useState`, `useEffect`). Integrated the Open Trivia DB API for dynamic question fetching. Developed custom scoring logic and managed application state to handle user selections and result evaluation.",
         vid: "pHqEuj4LIMI",
-        image: "/mockups/quizzical.png",
-        appBtn: "/quiz",
+        image: "mockups/quizzical.png",
+        appBtn: "quiz",
         codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Quiz"
     },
     {
@@ -26,8 +26,8 @@ const Data = [
         ],
         tech: "Implemented complex game state logic using React hooks. Leveraged local storage for data persistence across sessions. Integrated `react-confetti` for an enhanced win-state experience and utilized nanoid for efficient unique identifier management.",
         vid: "mO955G7wgp8",
-        image: "/mockups/tenzies.png",
-        appBtn: "/tenzies",
+        image: "mockups/tenzies.png",
+        appBtn: "tenzies",
         codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Tenzies"
     },
     {
@@ -42,8 +42,8 @@ const Data = [
         ],
         tech: "Integrated `react-mde` for Markdown editing and `showdown` for HTML conversion. Used `react-split` for the adjustable multi-pane layout. Managed data persistence and ordering to ensure the most recently edited notes appear first.",
         vid: "9qv45YGkvEU",
-        image: "/mockups/notes.png",
-        appBtn: "/notes",
+        image: "mockups/notes.png",
+        appBtn: "notes",
         codeBtn: "https://github.com/umairny/react23/tree/main/src/projects/Notes"
     }
 
