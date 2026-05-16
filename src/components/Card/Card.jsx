@@ -1,25 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Data from '../../data/Data'
 import './Card.scss'
 import { Link } from 'react-router-dom'
 import Animate from '../Animate/Animate'
-import reactLogo from '/projectLogo.svg'
-import Youtube from './Youtube'
 
-const Card = (props) => {
-    const [anim, setAnim] = useState(false)
-
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-        })
-    }
+const Card = () => {
     return (
-        <div className='card-grid'>
+        <section id='projects' className='projects-section'>
+            <div className='projects-intro'>
+                <p className='section-kicker'>Selected work</p>
+                <h2>Small apps, polished into product-like experiences.</h2>
+            </div>
+            <div className='card-grid'>
             {Data.map((item, index) =>
-                <div id={item.heading} key={index} className='project-card glass'>
+                <article id={item.heading} key={index} className='project-card'>
                     <div className='card-content'>
                         <div className='card-header'>
                             <Animate.FadeDown><span className='project-number'>Project {index + 1}</span></Animate.FadeDown>
@@ -46,7 +40,7 @@ const Card = (props) => {
 
                         <div className='card-footer'>
                             <div className='project-links'>
-                                <Link className='btn btn-primary' onClick={() => scrollToTop()} to={item.appBtn}>View Live App</Link>
+                                <Link className='btn btn-primary' to={`/${item.appBtn}`}>Try App</Link>
                                 <a className='btn btn-outline' href={item.codeBtn}>Source Code</a>
                             </div>
                         </div>
@@ -60,9 +54,10 @@ const Card = (props) => {
                             </div>
                         </Animate.ScaleIn>
                     </div>
-                </div>
+                </article>
             )}
-        </div>
+            </div>
+        </section>
     )
 }
 

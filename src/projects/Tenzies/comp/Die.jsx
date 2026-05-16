@@ -1,20 +1,15 @@
 export default function Die(props) {
-    const styles = {
-        backgroundColor: props.isHeld ? "var(--secondary)" : "white",
-        borderColor: props.isHeld ? "var(--secondary)" : "transparent",
-        transform: props.isHeld ? "scale(0.95)" : "scale(1)"
-    }
-
     return (
-        <div
+        <button
+            type="button"
             className={`die-face ${props.isHeld ? 'held' : ''}`}
-            style={styles}
             onClick={props.holdDice}
+            aria-pressed={props.isHeld}
+            aria-label={`${props.isHeld ? "Release" : "Hold"} die showing ${props.value}`}
         >
             <div 
                 className={`dot dot-${props.value}`}
-                style={{ filter: props.isHeld ? 'brightness(0) invert(1)' : 'none' }}
             ></div>
-        </div>
+        </button>
     )
 }

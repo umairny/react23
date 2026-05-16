@@ -1,44 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&display=swap');
-
 .home {
     max-width: 1200px;
-    min-height: 100vh;
+    min-height: calc(100vh - 70px);
     margin: 0 auto;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    justify-content: flex-start;
+    padding: clamp(3rem, 8vw, 6rem) 2rem;
+    position: relative;
 
     .hero-content {
         text-align: left;
-        max-width: 800px;
-        animation: hero-appear 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        max-width: 820px;
+        animation: hero-appear 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 
         .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--primary);
-            font-weight: 600;
+            font-size: 0.82rem;
+            color: var(--secondary);
+            font-weight: 800;
             margin-bottom: 1rem;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
         }
 
         .hero-title {
-            font-size: clamp(3rem, 10vw, 5rem);
+            font-size: clamp(3.25rem, 11vw, 6.8rem);
             font-weight: 800;
-            line-height: 1.1;
+            line-height: 0.95;
             margin-bottom: 1.5rem;
         }
 
         .hero-description {
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            font-size: clamp(1.08rem, 3vw, 1.45rem);
             color: var(--text-secondary);
-            max-width: 600px;
-            line-height: 1.6;
+            max-width: 680px;
+            line-height: 1.65;
 
             .highlight {
                 color: var(--text-primary);
-                font-weight: 600;
+                font-weight: 800;
+            }
+        }
+
+        .hero-scroll-link {
+            min-height: 48px;
+            margin-top: 2rem;
+            padding: 0.75rem 1.2rem;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            color: var(--text-primary);
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+
+            &:hover {
+                color: var(--primary);
+                border-color: rgba(99, 102, 241, 0.3);
+                transform: translateY(-2px);
             }
         }
     }
@@ -52,5 +74,18 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@media (max-width: 620px) {
+    .home {
+        padding: 3rem 1rem;
+        align-items: flex-start;
+
+        .hero-content {
+            .hero-title {
+                font-size: clamp(3rem, 16vw, 4.4rem);
+            }
+        }
     }
 }

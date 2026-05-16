@@ -1,13 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Header.scss";
 import Data from "../../data/Data";
 
 const Header = () => {
   const [toggel, setToggel] = useState(false);
+  const [activeSection, setActiveSection] = useState(Data[0]?.heading || "");
   const location = useLocation();
   const path = location.pathname.substring(1);
-  //console.log("path", path, location)
+  const activeProject = Data.find((item) => item.appBtn === path);
+
+  useEffect(() => {
+    if (path.length > 0) {
+      setActiveSection("");
+      return undefined;
+    }
+
+    function updateActiveSection() {
+      const scrollPosition = window.scrollY + 140;
+      const currentSection = Data.reduce((current, item) => {
+        const section = document.getElementById(item.heading);
+        if (section && section.offsetTop <= scrollPosition) {
+          return item.heading;
+        }
+        return current;
+      }, Data[0]?.heading || "");
+
+      setActiveSection(currentSection);
+    }
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveSection);
+    };
+  }, [path]);
 
   const scrollTo = (id) => {
     const scroll = document.getElementById(id);
@@ -48,21 +76,33 @@ const Header = () => {
         <div className={toggel ? "nav-menu show glass" : "nav-menu"}>
           {path.length === 0 &&
             Data.map((item, index) => (
-              <a
+              <button
+                type="button"
                 key={index}
                 onClick={() => {
                   (scrollTo(`${item.heading}`), setToggel(false));
                 }}
-                /*className={path === "" ? 'nav-link active' : 'nav-link'}*/ className="nav-link"
+                className={`nav-link ${activeSection === item.heading ? "active" : ""}`}
+                aria-current={activeSection === item.heading ? "page" : undefined}
               >
                 {item.heading}
-              </a>
+              </button>
             ))}
+          {path.length > 0 && activeProject && (
+            <span className="nav-link active current-app" aria-current="page">
+              {activeProject.heading}
+            </span>
+          )}
         </div>
         {path.length === 0 && (
-          <div onClick={() => setToggel(!toggel)} className="nav-toggel-btn">
+          <button
+            type="button"
+            onClick={() => setToggel(!toggel)}
+            className="nav-toggel-btn"
+            aria-label={toggel ? "Close navigation menu" : "Open navigation menu"}
+          >
             {toggel ? <>&#215;</> : <>&equiv;</>}
-          </div>
+          </button>
         )}
       </div>
     </nav>

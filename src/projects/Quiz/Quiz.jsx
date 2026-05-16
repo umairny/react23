@@ -2,13 +2,31 @@ import "./quiz.css";
 import Quizfetch from "./comp/Quizfetch";
 import { useState } from "react";
 
+const categories = [
+  { value: "9", label: "General Knowledge" },
+  { value: "10", label: "Books" },
+  { value: "11", label: "Films" },
+  { value: "12", label: "Music" },
+  { value: "17", label: "Nature & Science" },
+  { value: "18", label: "Computers" },
+  { value: "21", label: "Sports" },
+  { value: "23", label: "History" },
+  { value: "24", label: "Politics" },
+  { value: "25", label: "Art" },
+  { value: "27", label: "Animals" },
+];
+
+const questionCounts = ["5", "10", "15", "20"];
+const difficulties = ["easy", "medium", "hard"];
+
 export default function Quiz() {
   const [formData, setFormData] = useState({
-    cate: 9,
-    ques: 5,
+    cate: "9",
+    ques: "5",
     diffi: "easy",
   });
   const [start, setStart] = useState(false);
+  const [quizKey, setQuizKey] = useState(0);
   const url = `https://opentdb.com/api.php?amount=${formData.ques}&category=${formData.cate}&difficulty=${formData.diffi}&type=multiple`;
 
   function handleChange(event) {
@@ -18,55 +36,82 @@ export default function Quiz() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setQuizKey(prev => prev + 1);
     setStart(true);
   }
+
+  function playAgain() {
+    setQuizKey(prev => prev + 1);
+  }
+
+  function changeSettings() {
+    setStart(false);
+  }
+
+  const selectedCategory = categories.find(category => category.value === formData.cate)?.label;
 
   return (
     <main className="quiz-page">
       {!start ? (
-        <div className="quiz-card glass">
+        <div className="quiz-card">
           <header className="quiz-header">
-            <h1 className="gradient-text">Quizzical</h1>
-            <p className="quiz-subtitle">Challenge your mind with dynamic trivia</p>
+            <p className="quiz-kicker">Trivia trainer</p>
+            <h1>Quizzical</h1>
+            <p className="quiz-subtitle">Choose a lane, answer every question, then review what you missed.</p>
           </header>
 
           <form onSubmit={handleSubmit} className="quiz-config-form">
             <div className="form-group">
               <label>Select Category</label>
               <select name="cate" value={formData.cate} onChange={handleChange}>
-                <option value="9">General Knowledge</option>
-                <option value="10">Entertainment: Books</option>
-                <option value="11">Entertainment: Films</option>
-                <option value="12">Entertainment: Music</option>
-                <option value="17">Nature & Science</option>
-                <option value="18">Science: Computers</option>
-                <option value="21">Sports</option>
-                <option value="23">History</option>
-                <option value="24">Politics</option>
-                <option value="25">Art</option>
-                <option value="27">Animals</option>
+                {categories.map(category => (
+                  <option key={category.value} value={category.value}>{category.label}</option>
+                ))}
               </select>
             </div>
 
             <div className="form-row">
               <div className="form-group">
                 <label>Questions</label>
-                <select name="ques" value={formData.ques} onChange={handleChange}>
-                  <option value="5">5 Questions</option>
-                  <option value="10">10 Questions</option>
-                  <option value="15">15 Questions</option>
-                  <option value="20">20 Questions</option>
-                </select>
+                <div className="segmented-control">
+                  {questionCounts.map(count => (
+                    <label key={count} className={formData.ques === count ? "active" : ""}>
+                      <input
+                        type="radio"
+                        name="ques"
+                        value={count}
+                        checked={formData.ques === count}
+                        onChange={handleChange}
+                      />
+                      {count}
+                    </label>
+                  ))}
+                </div>
               </div>
 
               <div className="form-group">
                 <label>Difficulty</label>
-                <select name="diffi" value={formData.diffi} onChange={handleChange}>
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
-                </select>
+                <div className="segmented-control difficulty-control">
+                  {difficulties.map(difficulty => (
+                    <label key={difficulty} className={formData.diffi === difficulty ? "active" : ""}>
+                      <input
+                        type="radio"
+                        name="diffi"
+                        value={difficulty}
+                        checked={formData.diffi === difficulty}
+                        onChange={handleChange}
+                      />
+                      {difficulty}
+                    </label>
+                  ))}
+                </div>
               </div>
+            </div>
+
+            <div className="quiz-summary">
+              <span>{selectedCategory}</span>
+              <span>{formData.ques} questions</span>
+              <span>{formData.diffi}</span>
             </div>
 
             <button className="btn btn-primary start-btn">Start Quiz</button>
@@ -77,7 +122,18 @@ export default function Quiz() {
           </div>
         </div>
       ) : (
-        <Quizfetch url={url} start={start} totalScore={formData.ques} />
+        <Quizfetch
+          key={quizKey}
+          url={url}
+          totalScore={Number(formData.ques)}
+          settings={{
+            category: selectedCategory,
+            difficulty: formData.diffi,
+            questions: formData.ques
+          }}
+          onPlayAgain={playAgain}
+          onChangeSettings={changeSettings}
+        />
       )}
     </main>
   );

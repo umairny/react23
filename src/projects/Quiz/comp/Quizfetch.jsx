@@ -4,6 +4,12 @@ import ShowError from "./ShowError";
 import Loading from "./Loading";
 import { nanoid } from "nanoid";
 
+function decodeHtml(value) {
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = value;
+  return textarea.value;
+}
+
 export default function Quizfetch(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -11,6 +17,7 @@ export default function Quizfetch(props) {
 
   useEffect(() => {
     setIsLoaded(false);
+    setError(null);
     fetch(props.url)
       .then((res) => res.json())
       .then((data) => {
@@ -30,9 +37,9 @@ export default function Quizfetch(props) {
 
           return {
             id: id,
-            question: q.question,
-            correctAnswer: q.correct_answer,
-            answers: allAnswers
+            question: decodeHtml(q.question),
+            correctAnswer: decodeHtml(q.correct_answer),
+            answers: allAnswers.map(decodeHtml)
           };
         });
 
@@ -46,10 +53,18 @@ export default function Quizfetch(props) {
   }, [props.url]);
 
   if (error) {
-    return <ShowError err={error} />;
+    return <ShowError err={error} onChangeSettings={props.onChangeSettings} />;
   } else if (!isLoaded) {
-    return <Loading loading={!isLoaded} />;
+    return <Loading />;
   } else {
-    return <QuizStyle data={quizData} total={props.totalScore} />;
+    return (
+      <QuizStyle
+        data={quizData}
+        total={props.totalScore}
+        settings={props.settings}
+        onPlayAgain={props.onPlayAgain}
+        onChangeSettings={props.onChangeSettings}
+      />
+    );
   }
 }

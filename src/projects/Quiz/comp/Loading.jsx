@@ -1,8 +1,8 @@
-export default function Loading(props) {
-    //console.log(props)
+export default function Loading() {
     return (
         <div className="loading">
-            <h1>Loading</h1>
+            <p className="quiz-kicker">Building your quiz</p>
+            <h1>Loading questions</h1>
             <div className="loading-spin"></div>
         </div>
     )

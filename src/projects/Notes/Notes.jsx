@@ -6,22 +6,41 @@ import { nanoid } from "nanoid"
 import './notes.css'
 import "react-mde/lib/styles/css/react-mde-all.css";
 
+function getStoredNotes() {
+    try {
+        return JSON.parse(localStorage.getItem("notes")) || []
+    } catch {
+        return []
+    }
+}
+
 export default function Notes() {
-    const [notes, setNotes] = useState(
-        () => JSON.parse(localStorage.getItem("notes")) || []
-    )
+    const [notes, setNotes] = useState(getStoredNotes)
     const [currentNoteId, setCurrentNoteId] = useState(
         (notes[0] && notes[0].id) || ""
     )
+    const [searchTerm, setSearchTerm] = useState("")
 
     useEffect(() => {
         localStorage.setItem("notes", JSON.stringify(notes))
     }, [notes])
 
+    useEffect(() => {
+        if (notes.length === 0) {
+            setCurrentNoteId("")
+            return
+        }
+
+        if (!notes.some(note => note.id === currentNoteId)) {
+            setCurrentNoteId(notes[0].id)
+        }
+    }, [notes, currentNoteId])
+
     function createNewNote() {
         const newNote = {
             id: nanoid(),
-            body: "# Type your markdown note's title here"
+            body: "# Untitled note\n\nStart writing here...",
+            updatedAt: Date.now()
         }
         setNotes(prevNotes => [newNote, ...prevNotes])
         setCurrentNoteId(newNote.id)
@@ -34,7 +53,7 @@ export default function Notes() {
             for (let i = 0; i < oldNotes.length; i++) {
                 const oldNote = oldNotes[i]
                 if (oldNote.id === currentNoteId) {
-                    newArray.unshift({ ...oldNote, body: text })
+                    newArray.unshift({ ...oldNote, body: text, updatedAt: Date.now() })
                 } else {
                     newArray.push(oldNote)
                 }
@@ -54,43 +73,55 @@ export default function Notes() {
         }) || notes[0]
     }
 
+    const currentNote = findCurrentNote()
+    const filteredNotes = notes.filter(note => {
+        return note.body.toLowerCase().includes(searchTerm.trim().toLowerCase())
+    })
+
     return (
-        <main className="notes-container glass">
+        <main className="notes-page">
             {
                 notes.length > 0
                     ?
-                    <Split
-                        sizes={[25, 75]}
-                        direction="horizontal"
-                        className="notes-split"
-                    >
-                        <Sidebar
-                            notes={notes}
-                            currentNote={findCurrentNote()}
-                            setCurrentNoteId={setCurrentNoteId}
-                            newNote={createNewNote}
-                            deleteNote={deleteNote}
-                        />
-                        {
-                            currentNoteId &&
-                            notes.length > 0 &&
-                            <Editor
-                                currentNote={findCurrentNote()}
-                                updateNote={updateNote}
+                    <div className="notes-shell">
+                        <Split
+                            sizes={[28, 72]}
+                            minSize={[250, 420]}
+                            gutterSize={10}
+                            direction="horizontal"
+                            className="notes-split"
+                        >
+                            <Sidebar
+                                notes={filteredNotes}
+                                totalNotes={notes.length}
+                                currentNote={currentNote}
+                                searchTerm={searchTerm}
+                                setSearchTerm={setSearchTerm}
+                                setCurrentNoteId={setCurrentNoteId}
+                                newNote={createNewNote}
+                                deleteNote={deleteNote}
                             />
-                        }
-                    </Split>
+                            {
+                                currentNoteId &&
+                                currentNote &&
+                                <Editor
+                                    currentNote={currentNote}
+                                    updateNote={updateNote}
+                                />
+                            }
+                        </Split>
+                    </div>
                     :
                     <div className="notes-empty-state">
                         <div className="empty-content">
-                            <h1 className="gradient-text">Capture your thoughts</h1>
-                            <p>Start your journey by creating your first note.</p>
+                            <p className="empty-kicker">Markdown notes</p>
+                            <h1>Capture your thoughts</h1>
+                            <p>Start with one clean note. Your drafts are saved locally in this browser.</p>
                             <button
                                 className="btn btn-primary new-note-btn"
                                 onClick={createNewNote}
                             >
-                                <span className="plus-icon">+</span>
-                                <span className="btn-text">Create New Note</span>
+                                Create New Note
                             </button>
                         </div>
                     </div>

@@ -1,12 +1,12 @@
 export default function ShowError (props) {
-    //console.log(props)
     return (
         <div className="error">
-            <h1>Error some thing wrong.</h1>
-            <hr />
-            <h3>{props.err.message}</h3>
-            <hr />
-            <h1>404</h1>
+            <p className="quiz-kicker">Question fetch failed</p>
+            <h1>Could not load this quiz.</h1>
+            <p>{props.err.message}</p>
+            <button className="btn btn-primary" onClick={props.onChangeSettings}>
+                Change Settings
+            </button>
         </div>
     )
 }
